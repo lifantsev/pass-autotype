@@ -182,7 +182,7 @@ function select_and_type_pass_entry() {
 
     # copy and paste password
     log I "copying password into clipboard"
-    wl-copy "$(gpg --pinentry-mode cancel --quiet -d "$folder/$entry.gpg")"
+    wl-copy -o "$(gpg --pinentry-mode cancel --quiet -d "$folder/$entry.gpg")"
     # wl-copy "$(pass "${folder##*/}/$entry")"
 
     log I "typing password"
@@ -229,6 +229,3 @@ done
 
 log I "cleaning up fifo '$BLOCK_CHECK_GPG_FIFO'"
 rm "$BLOCK_CHECK_GPG_FIFO" > /dev/null
-
-log I "clearing clipboard to help with security"
-sleep 0.5 && wl-copy "cleared by pw.sh at $(date +"%H:%M @ %S.%3N")" &
