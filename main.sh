@@ -130,6 +130,7 @@ if (( interactive )); then
     fi
 fi
 
+# choose an entry from the list
 if [ ${#pass_entry_folder_matches[@]} == 1 ]; then
     pass_entry_folder="${pass_entry_folder_matches[0]}"
 else
