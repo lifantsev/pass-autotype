@@ -282,3 +282,5 @@ function clear_clip() {
 }
 
 clear_clip &
+
+log F "end of main.sh"
