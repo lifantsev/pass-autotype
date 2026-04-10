@@ -8,11 +8,13 @@ MAP_FILE="$PASSWORD_STORE_DIR/.map"
 ################
 flag_interactive=0
 flag_help=0
+flag_readme=0
 flag_log=0
 
 while [ -n "$1" ]; do
     case "$1" in
         "-h"|"--help") flag_help=1 ;;
+        "--readme") flag_readme=1 ;;
         "--log") flag_log=1 ;;
         "--interactive") flag_interactive=1 ;;
     esac
@@ -21,6 +23,11 @@ while [ -n "$1" ]; do
 done
 
 if (( flag_help )); then
+    cat "$(dirname "$0")/quickhelp.txt"
+    exit
+fi
+
+if (( flag_readme )); then
     if command -v bat > /dev/null
     then bat "$(dirname "$0")/README.md"
     else cat "$(dirname "$0")/README.md"
