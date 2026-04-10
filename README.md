@@ -6,12 +6,13 @@
 ### Why use `pw`?
 - It automatically fills in all credentials with no user input required (as long as you [set up rules in the mapfile](#mapfile))
     - If you haven't set up a rule, you manually choose a password store entry
-- It can be used to enter passwords into any application - not just browsers
 - It's as fast as possible without fully removing control from the user (all you do is run it)
     - On my machine `pw` takes ~350ms to automatically detect the website, type username and password, and hit enter
     - 200ms of that is waiting for `gpg` to decrypt files
-- It's not a browser extension (those are prone to [some issues](https://cmpxchg8b.com/passmgrs.html))
-- It's not an extension (some browsers like `qutebrowser` don't support them)
+- It's not a browser extension
+    - Some browsers like `qutebrowser` don't support extensions
+    - Extensions are prone to [some security issues](https://cmpxchg8b.com/passmgrs.html))
+- It can be used to enter passwords into any application - not just browsers
 
 ### Why not use `pw`
 - you don't use wayland (`pw` depends on `wl-copy` and `wtype`)
