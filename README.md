@@ -15,10 +15,10 @@
     - Extensions are prone to [some security issues](https://cmpxchg8b.com/passmgrs.html)
 
 ### Why not use `pw`
-- you don't use wayland (`pw` depends on `wl-copy` and `wtype`)
-- you want website detection rules out of the box (`pw` expects you to [manually set them](#mapfile))
-- you want OTP support
-- you don't format your password store the way `pw` expects: a folder for each account, with a separate gpg file for each credential. for example:
+- You don't use wayland (`pw` depends on `wl-copy` and `wtype`)
+- You want website detection rules out of the box (`pw` expects you to [manually set them](#mapfile))
+- You want OTP support
+- You don't format your password store the way `pw` expects: a folder for each account, with a separate gpg file for each credential. for example:
     - `$PASSWORD_STORE_DIR/google-personal/` containing `username.gpg` and `password.gpg`
     - `$PASSWORD_STORE_DIR/spotify/` containing `username.gpg` and `password.gpg`
 
