@@ -9,7 +9,7 @@
 - It can be used to enter passwords into any application - not just browsers
 - It's as fast as possible without fully removing control from the user (all you do is run it)
     - On my machine `pw` takes ~350ms to automatically detect the website, type username and password, and hit enter
-    - 200ms of that is waiting for `wl-copy` and `gpg`
+    - 200ms of that is waiting for `gpg` to decrypt files
 - It's not a browser extension (those are prone to [some issues](https://cmpxchg8b.com/passmgrs.html))
 - It's not an extension (some browsers like `qutebrowser` don't support them)
 
