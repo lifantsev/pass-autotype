@@ -3,8 +3,6 @@
 # TODO make the script usable more general:
 # currently depends on `hyprctl`, `browser get-url`, and `pypr show gpg`
 
-# TODO bat readme instead of catting (if available)
-
 # NOTE comment/uncomment these to disable/enable logging
 # echo >> /tmp/pw.log
 function log() {
@@ -21,7 +19,14 @@ MAP_FILE_SEPARATOR=" /// "
 MAP_FILE="$PASSWORD_STORE_DIR/.map"
 
 flag="$1"
-if [ "$flag" == "-h" ] || [ "$flag" == "--help" ]; then cat "$(dirname "$0")/README.md"; exit; fi
+if [ "$flag" == "-h" ] || [ "$flag" == "--help" ]; then
+    if command -v bat > /dev/null
+    then bat "$(dirname "$0")/README.md"
+    else cat "$(dirname "$0")/README.md"
+    fi
+    exit
+fi
+
 interactive=0
 if [ "$flag" == "--interactive" ]; then interactive=1; fi
 
