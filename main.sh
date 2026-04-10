@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO remove ugly error messages when user intentionally provides no input
+
 MAP_FILE_SEPARATOR=" /// "
 MAP_FILE="$PASSWORD_STORE_DIR/.map"
 
@@ -49,9 +51,12 @@ log F "beggining of main.sh"
 log . "asserting state of environment"
 [ ! -d "$PASSWORD_STORE_DIR" ] && log E "please set \$PASSWORD_STORE_DIR to the .pass directory" && exit 1
 [ ! -f "$PASSWORD_STORE_DIR/blank.gpg" ] && log E "please create a dummy gpg file at \$PASSWORD_STORE_DIR/blank.gpg" && exit 1
-! command -v "$DMENU_PROGRAM" > /dev/null && log E "please set \$DMENU_PROGRAM to the name of a dmenu-like program" && exit 1
 [ -z "$GET_WINDOW_CLASS" ] && log E "please set \$GET_WINDOW_CLASS to a script that prints window class" && exit 1
 [ -z "$GET_WINDOW_TITLE" ] && log E "please set \$GET_WINDOW_TITLE to a script that prints window title" && exit 1
+! command -v "$DMENU_PROGRAM" > /dev/null && log E "please set \$DMENU_PROGRAM to the name of a dmenu-like program" && exit 1
+! command -v gpg > /dev/null && log E "gpg is a dependency, please install it" && exit 1
+! command -v wl-copy > /dev/null && log E "wl-copy is a dependency, please install it" && exit 1
+! command -v wtype > /dev/null && log E "wtype is a dependency, please install it" && exit 1
 
 #####################################
 # FUNCTIONS TO DEAL WITH GPG UNLOCK #
