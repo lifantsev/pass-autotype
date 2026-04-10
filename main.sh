@@ -71,22 +71,27 @@ gpg_unlocked=-1
 # check if gpg is unlocked, and print result to a blocking fifo
 function check_gpg_unlocked() {
     mkfifo "$BLOCK_CHECK_GPG_FIFO"
-    log I "made fifo '$BLOCK_CHECK_GPG_FIFO' to wait until gpg check is complete"
+    log G "made fifo '$BLOCK_CHECK_GPG_FIFO' to wait until gpg check is complete"
 
     if gpg --pinentry-mode cancel --quiet -d "$GPG_TEST_FILE" 2>&1 | grep -q "^gpg:.*failed: Operation cancelled"; then
-        log I "gpg key is locked, will have to be unlocked later"
+        log G "gpg key is locked, will have to be unlocked later"
         echo 0 > "$BLOCK_CHECK_GPG_FIFO"
     else
-        log I "gpg key is unlocked"
+        log G "gpg key is unlocked"
         echo 1 > "$BLOCK_CHECK_GPG_FIFO"
     fi
+
+    log G "gpg check has completed"
 }
 
 # unblock the fifo & remove it, then exit
 # (because just exiting will leave the above function hanging on the print to fifo)
 function clean_fifo_exit() {
+    log I "cleaning fifo (to exit)"
     cat "$BLOCK_CHECK_GPG_FIFO" > /dev/null
     rm "$BLOCK_CHECK_GPG_FIFO" > /dev/null
+
+    log I "exiting... bye bye..."
     exit
 }
 
@@ -108,7 +113,7 @@ function unlock_gpg() {
     log I "unlocked gpg key manually"
 }
 
-log I "checking lock status of gpg key in background"
+log G "checking lock status of gpg key in background"
 check_gpg_unlocked &
 
 #######################
@@ -178,8 +183,8 @@ fi
 
 log . "pass_entry_folder='$pass_entry_folder'"
 
-[ -z "$pass_entry_folder" ] && log E "wasnt able to choose a pass folder, exiting" && clean_fifo_exit
-[ "$pass_entry_folder" == "$PASSWORD_STORE_DIR/" ] && log E "wasnt able to choose a pass folder, exiting" && clean_fifo_exit
+if [ "$pass_entry_folder" == "$PASSWORD_STORE_DIR/" ]; then log I "user failed to choose a pass folder, exiting" ; clean_fifo_exit ; fi
+if [ ! -d "$pass_entry_folder" ]; then log E "selected pass folder somehow isn't a valid directory: '$pass_entry_folder', exiting" ; clean_fifo_exit ; fi
 
 ######################################
 # DEFINE FUNCTION TO TYPE PASS ENTRY #
@@ -205,7 +210,8 @@ function select_and_type_pass_entry() {
     else entry="$(printf '%s\n' "${entry_matches[@]##*/}" | sed 's|.gpg$||' | $DMENU_PROGRAM)"
     fi
 
-    [ ! -f "$folder/$entry.gpg" ] && log E "ERROR NOT A FILE: '$folder/$entry.gpg'" && clean_fifo_exit
+    if [ -z "$entry" ]; then log I "user failed to choose a pass entry, exiting" ; clean_fifo_exit ; fi
+    if [ ! -f "$folder/$entry.gpg" ]; then log E "selected pass entry somehow isn't a valid file: '$folder/$entry.gpg', exiting" ; clean_fifo_exit ; fi
     log . "entry='$entry'"
 
     # wait for async gpg unlock check to complete
@@ -223,7 +229,7 @@ function select_and_type_pass_entry() {
 
     # copy and paste password
     log I "copying password into clipboard"
-    wl-copy "$(gpg --pinentry-mode cancel --quiet -d "$folder/$entry.gpg")"
+    wl-copy "$(gpg --pinentry-mode cancel --quiet -d "$folder/$entry.gpg")" 2>/dev/null
 
     log I "typing password"
     case "$map_class" in
@@ -269,5 +275,10 @@ done
 log I "cleaning up fifo '$BLOCK_CHECK_GPG_FIFO'"
 rm "$BLOCK_CHECK_GPG_FIFO" > /dev/null
 
-log I "clearing clipboard to help with security"
-sleep 0.5 && wl-copy "cleared by pw.sh at $(date +"%H:%M @ %S.%3N")" &
+function clear_clip() {
+    log I "clearing clipboard to help with security"
+    sleep 0.5
+    wl-copy "cleared by pw.sh" 2>/dev/null
+}
+
+clear_clip &
