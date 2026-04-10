@@ -1,7 +1,7 @@
 ## Description
 
-`pw` turns the `$PASSWORD_STORE_DIR` into a convenient password manager with autofilling capabilities. Navigate to a login page, run `pw`, and the correct credentials will automatically be typed and entered, instantly logging you in. It looks at the current window's class and title to decide which password file to decrypt and type (this behaviour is [fully configurable](#mapfile)).
-- Note that although `pw` is great to use along with `pass`, it does not depend on it. All you need is a password-store with gpg files.
+`pw` is a simple bash script that turns the `$PASSWORD_STORE_DIR` into a convenient password manager with autofilling capabilities. Navigate to a login page, run `pw`, and the correct credentials will automatically be typed and entered, instantly logging you in. It looks at the current window's class and title to decide which password file to decrypt and type (this behaviour is [fully configurable](#mapfile)).
+- Note that although `pw` is great to use along with `pass`, it does not depend on it. All you need is a password-store containing gpg files.
 
 ### Why use `pw`?
 - It automatically fills in all credentials with no user input required (as long as you [set up rules in the mapfile](#mapfile))
@@ -9,10 +9,10 @@
 - It's as fast as possible without fully removing control from the user (all you do is run it)
     - On my machine `pw` takes ~350ms to automatically detect the website, type username and password, and hit enter
     - 200ms of that is waiting for `gpg` to decrypt files
+- It can be used to enter passwords into any application - not just browsers
 - It's not a browser extension
     - Some browsers like `qutebrowser` don't support extensions
     - Extensions are prone to [some security issues](https://cmpxchg8b.com/passmgrs.html)
-- It can be used to enter passwords into any application - not just browsers
 
 ### Why not use `pw`
 - you don't use wayland (`pw` depends on `wl-copy` and `wtype`)
@@ -23,9 +23,9 @@
     - `$PASSWORD_STORE_DIR/spotify/` containing `username.gpg` and `password.gpg`
 
 ### Alternatives
-- [tessen](https://github.com/ayushnix/tessen): a more mature project, but it doesn't automatically detect the website/application
-- [browserpass](https://github.com/browserpass/browserpass-extension): comes with the advantages and disadvantages of being a browser extension
-- [awesome-password-store](https://github.com/tijn/awesome-password-store): a list of extensions and interfaces for `pass`
+- [tessen](https://github.com/ayushnix/tessen): a more mature project, but it doesn't automatically detect the website/application.
+- [browserpass](https://github.com/browserpass/browserpass-extension): comes with the advantages and disadvantages of being a browser extension.
+- [awesome-password-store](https://github.com/tijn/awesome-password-store): a list of extensions and interfaces for `pass`.
 
 ## Installation
 Simply clone this repo somewhere on your machine, `chmod +x` the `main.sh` file, and run `main.sh` anytime you want to run the program. You can also use an alias or add to the $PATH if it's convenient.
