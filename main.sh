@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO make the script usable more general:
-# currently depends on `browser get-url`
-
 # echo >> /tmp/pw.log # NOTE
 function log() {
     # echo "$1 $(date +"%H:%M @ %S.%3N") $1 $2" >> /tmp/pw.log # NOTE
@@ -107,11 +104,7 @@ echo -e "$BROWSER\n$BROWSERS"   | grep -qi "$window_class" && map_class="browser
 echo -e "$TERMINAL\n$TERMINALS" | grep -qi "$window_class" && map_class="terminal"
 [ -z "$map_class" ] && map_class="other"
 
-if [[ "$window_class" == *"qutebrowser"* ]]; then
-    map_title="${window_title/ - [^ ]*/} $(browser get-url | sed -e 's|^[^/]*//\([^/]*\)/.*|[\1]|')" # the sed expression takes everything between the first // and the next / and puts it in brackets
-else
-    map_title="$window_title"
-fi
+map_title="$window_title"
 
 log . "map_title='$map_title'"
 log . "map_class='$map_class'"
