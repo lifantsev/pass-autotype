@@ -94,20 +94,31 @@ Here is an example line I have in my personal mapfile:
 ```
 browser /// LinkedIn Login .* LinkedIn /// linkedin /// uTpE
 ```
-It will match when the current window is a browser with the linkedin login page open. Let's suppose that in `$PASSWORD_STORE_DIR` I have 2 subfolders: `linkedin-alice` and `linkedin-bob`, each containing `user.gpg` & `pass.gpg`. Then, when I run `pw`, I will first be prompted to choose between the alice and bob accounts. Let's say I choose `linkedin-alice`. Then, `pw` will type the decrypted contents of `linkedin-alice/user.gpg` (the username) press `Tab`, type the contents of `linkedin-alice/pass.gpg` (password) and finally press `Return`, logging me in.
+It will match when the current window is a browser with the linkedin login page open. Let's suppose that in `$PASSWORD_STORE_DIR` I have 2 subfolders: `linkedin-alice` and `linkedin-bob`, each containing `user.gpg` & `pass.gpg`. Then, when I run `pw`, I will first be prompted to choose between the alice and bob accounts. Let's say I choose `linkedin-alice`. Then, `pw` will type the decrypted contents of `linkedin-alice/user.gpg` (the username), press `Tab`, type the contents of `linkedin-alice/pass.gpg` (password), and finally press `Return`, logging me in.
 
 Or an example with the terminal:
 ```
-terminal /// ssh /// ssh /// .E
+terminal /// ssh /// ssh-passwords /// .E
 ```
-Matches when the current window is a terminal, and the currently running command contains ssh. Let's say the `ssh` subfolder contains multiple entries (maybe passwords for different machines I frequently ssh into). Then when I run `pw`, I will be prompted to choose one of these passwords, it will be typed and the enter key will be hit, logging me into the remote connection.
+Matches when the current window is a terminal, and the currently running command contains ssh. Let's say the `ssh-passwords` subfolder contains multiple entries (maybe passwords for different machines I frequently ssh into). Then when I run `pw`, I will be prompted to choose one of these passwords, it will be typed and the enter key will be hit, logging me into the remote connection.
 
 ## Dependencies
 
 - `gpg`, to decrypt passwords
 - `wl-copy`, to copy passwords
-- `wtype`, to press 'Tab', 'Enter' and 'Ctrl+V' to paste passwords
+- `wtype`, to press 'Tab', 'Enter', 'Space' and 'Ctrl+V' to paste passwords
+- `awk`, to find matching lines in the mapfile
 
 ## Troubleshooting
 
-TODO
+- Make sure all required [env vars](#environment) are set correctly.
+- Make sure your `gpg-agent` is set up correctly, and caches passwords properly
+- Use the logging flag: `pw --log` and look for issues in the logs
+    - Check that `window_title` and `window_class` have the values you would expect
+        - If they don't, look for problems with `eval "$GET_WINDOW_TITLE"` and `eval "$GET_WINDOW_CLASS"`.
+    - Check that `pass_entry_folder_fragment` and `pass_entry_sequence` have the values you expect
+        - If not, look for problems with your mapfile, check the regex patterns etc
+    - Check that your clipboard is working properly, maybe `wl-copy` isn't properly copying the password
+    - Check that the line `end of main.sh` appears at the bottom of the log.
+        - If not, some command might be hanging.
+
