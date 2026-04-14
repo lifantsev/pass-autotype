@@ -123,8 +123,8 @@ fi
 
 log . "pass_entry_folder='$pass_entry_folder'"
 
-if [ "$pass_entry_folder" == "$PASSWORD_STORE_DIR/" ]; then log I "user failed to choose a pass folder, exiting" ; clean_fifo_exit ; fi
-if [ ! -d "$pass_entry_folder" ]; then log E "selected pass folder somehow isn't a valid directory: '$pass_entry_folder', exiting" ; clean_fifo_exit ; fi
+if [ "$pass_entry_folder" == "$PASSWORD_STORE_DIR/" ]; then log I "user failed to choose a pass folder, exiting" ; exit 0 ; fi
+if [ ! -d "$pass_entry_folder" ]; then log E "selected pass folder somehow isn't a valid directory: '$pass_entry_folder', exiting" ; exit 0 ; fi
 
 ######################################
 # DEFINE FUNCTION TO TYPE PASS ENTRY #
@@ -150,13 +150,18 @@ function select_and_type_pass_entry() {
     else entry="$(printf '%s\n' "${entry_matches[@]##*/}" | sed 's|.gpg$||' | $DMENU_PROGRAM)"
     fi
 
-    if [ -z "$entry" ]; then log I "user failed to choose a pass entry, exiting" ; clean_fifo_exit ; fi
-    if [ ! -f "$folder/$entry.gpg" ]; then log E "selected pass entry somehow isn't a valid file: '$folder/$entry.gpg', exiting" ; clean_fifo_exit ; fi
+    if [ -z "$entry" ]; then log I "user failed to choose a pass entry, exiting" ; exit 0 ; fi
+    if [ ! -f "$folder/$entry.gpg" ]; then log E "selected pass entry somehow isn't a valid file: '$folder/$entry.gpg', exiting" ; exit 0 ; fi
     log . "entry='$entry'"
 
     # copy and paste password
-    log I "copying password into clipboard"
-    wl-copy "$(gpg --quiet -d "$folder/$entry.gpg")" 2>/dev/null
+    log I "decrypting password"
+    if ! result="$(gpg --quiet -d "$folder/$entry.gpg" 2>/dev/null)"; then
+        log E "gpg failed: user probably cancelled or ran out of tries, exiting"; exit 0
+    fi
+    log . "copying password into clipboard"
+    wl-copy "$result"
+    result=""
 
     log I "typing password"
     case "$map_class" in
