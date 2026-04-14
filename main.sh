@@ -156,7 +156,7 @@ function select_and_type_pass_entry() {
 
     # copy and paste password
     log I "copying password into clipboard"
-    wl-copy "$(gpg --pinentry-mode cancel --quiet -d "$folder/$entry.gpg")" 2>/dev/null
+    wl-copy "$(gpg --quiet -d "$folder/$entry.gpg")" 2>/dev/null
 
     log I "typing password"
     case "$map_class" in
