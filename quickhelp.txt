@@ -1,9 +1,9 @@
-'pw' turns the $PASSWORD_STORE_DIR into a password manager with autofilling capabilities
+'pass-autotype' turns the $PASSWORD_STORE_DIR into a password manager with autofilling capabilities
 
 === Usage ===
   noargs        : use mapfile to auto-type credentials, asking user only if ambiguous
   --interactive : always ask for user confirmation even if mapfile is unambiguous
-  --log         : enable logging to /tmp/pw.log
+  --log         : enable logging to /tmp/pass-autotype.log
   --readme      : print the full project README.md
   -h | --help   : print this help file
 

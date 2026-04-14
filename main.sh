@@ -3,9 +3,6 @@
 MAP_FILE_SEPARATOR=" /// "
 MAP_FILE="$PASSWORD_STORE_DIR/.map"
 
-# TODO rename to pass-autotype
-# TODO disable gpg precheck, its stupid & wasteful
-
 ################
 # HANDLE FLAGS #
 ################
@@ -38,10 +35,10 @@ if (( flag_readme )); then
     exit
 fi
 
-(( flag_log )) && echo >> /tmp/pw.log
+(( flag_log )) && echo >> /tmp/pass-autotype.log
 function log() {
-    (( flag_log )) && echo "$1 $(date +"%H:%M @ %S.%3N") $1 $2" >> /tmp/pw.log
-    [ "$1" == E ] && echo "pw error: $2"
+    (( flag_log )) && echo "$1 $(date +"%H:%M @ %S.%3N") $1 $2" >> /tmp/pass-autotype.log
+    [ "$1" == E ] && echo "pass-autotype error: $2"
 }
 
 log F "beggining of main.sh"
@@ -205,7 +202,7 @@ done
 function clear_clip() {
     log I "clearing clipboard to help with security"
     sleep 0.5
-    wl-copy "cleared by pw.sh" 2>/dev/null
+    wl-copy "cleared by pass-autotype.sh" 2>/dev/null
     return 0
 }
 
