@@ -8,11 +8,10 @@
   -h | --help   : print this help file
 
 === Environment Variables ===
-  PASSWORD_STORE_DIR : must contain `blank.gpg`, `.map`, and folders with gpg files
+  PASSWORD_STORE_DIR : must contain `.map` and folders with gpg files
   DMENU_PROGRAM      : something like `dmenu` `rofi` or `bemenu`
   GET_WINDOW_CLASS   : a script that outputs the current window class
   GET_WINDOW_TITLE   : a script that outputs the current window title
-  GPG_UNLOCK         : OPTIONAL: a script that unlocks and caches the gpg key
 
 === Map File ===
   $PASSWORD_STORE_DIR/.map : formatted as follows
