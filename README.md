@@ -1,6 +1,8 @@
-## Description
+# pass-autotype
 
-`pass-autotype` is a simple bash script that turns the `$PASSWORD_STORE_DIR` into a convenient password manager with autofilling capabilities. Navigate to a login page, run `pass-autotype`, and the correct credentials will automatically be typed and entered, instantly logging you in. It looks at the current window's class and title to decide which password files to decrypt and type (this behaviour is [fully configurable](#mapfile)).
+Simple bash script that turns the `$PASSWORD_STORE_DIR` into a convenient password manager with autofilling capabilities. Navigate to a login page, run `pass-autotype`, and credentials will be typed and entered. Uses window class & title to identify login pages.
+
+- [alternatives](#alternatives), [installation](#installation), [usage](#usage), [configuration](#configuration), [troubleshooting](#troubleshooting)
 
 <img width="2278" height="1384" alt="pass-autotype-demo" src="https://github.com/user-attachments/assets/7df7270b-1d14-468d-bebc-51b2e761cf9a" />
 
@@ -25,7 +27,7 @@
     - `$PASSWORD_STORE_DIR/google-personal/` containing `username.gpg` and `password.gpg`
     - `$PASSWORD_STORE_DIR/spotify/` containing `username.gpg` and `password.gpg`
 
-### Alternatives
+## Alternatives
 - [wosc/pass-autotype](https://github.com/wosc/pass-autotype) uses xdotool -> isn't wayland compatible
 - [tessen](https://github.com/ayushnix/tessen): a more mature project, but it doesn't automatically detect the website/application
 - [browserpass](https://github.com/browserpass/browserpass-extension): comes with the advantages and disadvantages of being a browser extension
@@ -48,7 +50,8 @@ Prints the contents of `quickhelp.txt` and exits.
 ### --readme
 Prints the contents of this README and exits.
 
-## Environment
+## Configuration
+### Environment
 - `$PASSWORD_STORE_DIR` Should be set to a directory containing folders that contain login credentials.
     - For example `$PASSWORD_STORE_DIR/google/pass.gpg` would be your google password.
 
@@ -61,41 +64,8 @@ Prints the contents of this README and exits.
     - For hyprland: `hyprctl activewindow -j | jq -r .title`
         - Note that for matching browser pages it's useful to use something like [url-in-title extension](https://chromewebstore.google.com/detail/url-in-title/ignpacbgnbnkaiooknalneoeladjnfgb).
 
-## Mapfile
-`pass-autotype` attempts to automatically enter the correct credentials based on window class & title. This behaviour is defined in the mapfile (`$PASSWORD_STORE_DIR/.map`). Each line in the mapfile defines one association between class/title and pass entries, as shown below (note that `pass-autotype` stops at the first line that matches the class & title, so put more specific regexes at the top of the mapfile)
-```
-<class> /// <title regex> /// <folder name fragment> /// <entry sequence> # optional comment
-```
-
-### Matching Class & Title
-`<class>`: One of 'browser', 'terminal' or 'other'. Windows are classified using the environment variables `$BROWSER`, `$TERMINAL`, `$BROWSERS`, and `$TERMINALS`.
-
-`<title regex>`: matched against window title using `awk` regex.
-
-### Credential Entry:
-`<folder name fragment>`: The beginning of the name of a subfolder of `$PASSWORD_STORE_DIR`. If multiple subfolders share the given beginning, user will be prompted to choose one.
-
-`<entry sequence>`: a string of characters that tells `pass-autotype` how to enter your credentials, read character by character:
-- lowercase character -> selects an entry in the subfolder starting with that char (uses user input if there are multiple matches) & types its contents.
-- `.` -> allows the user to choose any entry & types its contents
-- `$` -> types contents of entry matching system hostname
-- `~` -> types contents of entry matching current user's username
-- `T` -> presses the tab key
-- `E` -> presses the enter key
-- ` ` -> presses the space key
-
-### Examples
-Here is an example line I have in my personal mapfile:
-```
-browser /// LinkedIn Login .* LinkedIn /// linkedin /// uTpE
-```
-It will match when the current window is a browser with the linkedin login page open. Let's suppose that in `$PASSWORD_STORE_DIR` I have 2 subfolders: `linkedin-alice` and `linkedin-bob`, each containing `user.gpg` & `pass.gpg`. Then, when I run `pass-autotype`, I will first be prompted to choose between the alice and bob accounts. Let's say I choose `linkedin-alice`. Then, `pass-autotype` will type the decrypted contents of `linkedin-alice/user.gpg` (the username), press `Tab`, type the contents of `linkedin-alice/pass.gpg` (password), and finally press `Return`, logging me in.
-
-Or an example with the terminal:
-```
-terminal /// ssh /// ssh-passwords /// .E
-```
-Matches when the current window is a terminal, and the currently running command contains ssh. Let's say the `ssh-passwords` subfolder contains multiple entries (maybe passwords for different machines I frequently ssh into). Then when I run `pass-autotype`, I will be prompted to choose one of these passwords, it will be typed and the enter key will be hit, logging me into the remote connection.
+### Mapfile
+In depth docs [here](MAPFILE.md). The mapfile determines which credentials are tied to which login pages.
 
 ## Dependencies
 
@@ -116,4 +86,3 @@ Matches when the current window is a terminal, and the currently running command
     - Check that your clipboard is working properly, maybe `wl-copy` isn't properly copying the password
     - Check that the line `end of main.sh` appears at the bottom of the log.
         - If not, some command might be hanging.
-
