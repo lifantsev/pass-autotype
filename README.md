@@ -6,7 +6,7 @@ Simple bash script that turns the `$PASSWORD_STORE_DIR` into a convenient passwo
 
 <img width="2278" height="1384" alt="pass-autotype-demo" src="https://github.com/user-attachments/assets/7df7270b-1d14-468d-bebc-51b2e761cf9a" />
 
-- Note that although `pass-autotype` is great to use along with `pass`, it does not depend on it. All you need is a password-store containing gpg files.
+Note that although `pass-autotype` is great to use along with `pass`, it does not depend on it. All you need is a password-store containing gpg files.
 
 ### Why use `pass-autotype`?
 - It automatically fills in all credentials with no user input required (as long as you [set up rules in the mapfile](#mapfile))
