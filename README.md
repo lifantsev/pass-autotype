@@ -1,6 +1,9 @@
 ## Description
 
 `pass-autotype` is a simple bash script that turns the `$PASSWORD_STORE_DIR` into a convenient password manager with autofilling capabilities. Navigate to a login page, run `pass-autotype`, and the correct credentials will automatically be typed and entered, instantly logging you in. It looks at the current window's class and title to decide which password files to decrypt and type (this behaviour is [fully configurable](#mapfile)).
+
+<img width="2278" height="1384" alt="pass-autotype-demo" src="https://github.com/user-attachments/assets/7df7270b-1d14-468d-bebc-51b2e761cf9a" />
+
 - Note that although `pass-autotype` is great to use along with `pass`, it does not depend on it. All you need is a password-store containing gpg files.
 
 ### Why use `pass-autotype`?
