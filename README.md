@@ -7,8 +7,8 @@
 - It automatically fills in all credentials with no user input required (as long as you [set up rules in the mapfile](#mapfile))
     - If you haven't set up a rule, you manually choose a password store entry
 - It's as fast as possible without fully removing control from the user (all you do is run it)
-    - On my machine `pass-autotype` takes ~300ms to automatically detect the website, type username and password, and hit enter
-    - 200ms of that is waiting for `gpg` to decrypt files
+    - On my machine `pass-autotype` takes ~270ms to automatically detect the website, type username and password, and hit enter
+    - 70% of runtime is waiting for `gpg` to decrypt files
 - It can be used to enter passwords into any application - not just browsers
 - It's not a browser extension
     - Some browsers like `qutebrowser` don't support extensions
